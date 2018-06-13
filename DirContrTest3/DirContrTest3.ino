@@ -31,6 +31,7 @@ void loop() {
     break;
     
     case 1: // Line on the right - Adjust to the right
+    while(digitalRead(2) != HIGH)
      upSpeed(100, 50);
     break;
     
@@ -48,8 +49,8 @@ void loop() {
     break;
     
     case 4: // Line on the left - Adjust to the left
+    while(digitalRead(2) != HIGH)
      upSpeed(50, 100);
-     delay(100);
     break;
     
     case 5: // Line on both right and left - Everything's fine..
@@ -70,8 +71,7 @@ void loop() {
        upSpeed(-80, 100);
     break;
   }
-  }
-  delay(10);
+  delay(1);
 }
 
 void upSpeed(int M1, int M2) {
