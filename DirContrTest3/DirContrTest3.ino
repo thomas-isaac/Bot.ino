@@ -3,7 +3,6 @@
 #define i2c_add 0x0f
 
 byte i, j, dir;
-byte state = 0;
 
 int signalPin2 = 2;
 int signalPin3 = 3;
@@ -24,9 +23,6 @@ void loop() {
     if(digitalRead(i) == HIGH) // Some sort of bit shift logic
       dir += j;
   }
-  
-  if(dir != 2 && dir != state) {
-    state = dir;
     
   switch (dir) { // A bit shameful
 
@@ -40,16 +36,20 @@ void loop() {
     
     case 2: // Line in the middle - Keep going
      upSpeed(100, 100);
+     delay(100);
     break;
     
     case 3: // Line on both right and mid - Turn right
      delay(100);
      upSpeed(0, 0);
-     upSpeed(100, -80);
+     while(digitalRead(2) != HIGH)
+       upSpeed(100, -80);
+     
     break;
     
     case 4: // Line on the left - Adjust to the left
      upSpeed(50, 100);
+     delay(100);
     break;
     
     case 5: // Line on both right and left - Everything's fine..
@@ -59,13 +59,15 @@ void loop() {
     case 6: // Line on both left and mid - Turn left
      delay(100);
      upSpeed(0, 0);
-     upSpeed(-80, 100);
+     while(digitalRead(2) != HIGH)
+       upSpeed(-80, 100);
     break;
     
     case 7: // Line on left, right and mid - Merry Christmas
      delay(100);
      upSpeed(0, 0);
-     upSpeed(-80, 100);
+     while(digitalRead(2) != HIGH)
+       upSpeed(-80, 100);
     break;
   }
   }
