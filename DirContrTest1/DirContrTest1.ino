@@ -32,13 +32,13 @@ void loop() {
   switch (dir) { // A bit shameful
 
     case 0: //No line detected - Stop both motors
-     Motor.stop(MOTOR1);
-     Motor.stop(MOTOR2);
+     Motor.speed(MOTOR1, 100);
+     Motor.speed(MOTOR2, -100);
     break;
     
     case 1: // Line on the right - Adjust to the right
      Motor.speed(MOTOR1, 100);
-     Motor.speed(MOTOR2, -50);
+     Motor.speed(MOTOR2, -75);
     break;
     
     case 2: // Line in the middle - Keep going
@@ -56,7 +56,7 @@ void loop() {
     break;
     
     case 4: // Line on the left - Adjust to the left
-     Motor.speed(MOTOR1, 50); 
+     Motor.speed(MOTOR1, 75); 
      Motor.speed(MOTOR2, -100);
     break;
     
