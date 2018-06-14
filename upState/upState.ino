@@ -2,7 +2,8 @@
 #include <Wire.h>
 #define i2c_add 0x0f
 
-byte i,j;
+byte i, j, k;
+
 int speed1 = 0;
 int speed2 = 0;
 
@@ -20,20 +21,27 @@ void setup() {
 
 void loop() {
   
-  for(i=2; i<5; i++) { // Read each pin INPUT (2-5)
+  for(j=0, i=2; i<5; i++, j++) { // Read each pin INPUT (2-5)
     if(digitalRead(i) == HIGH)
+      j++;
       upState();
   }
   
-  if(speed1 < 0 && speed2 < 0)
-    speed1 = speed2 = 0;
-  else if(speed1 < 0 && speed2 > 0)
-    speed1 = speed2;
-  else if(speed1 > 0 && speed2 < 0)
-    speed2 = speed1;
-
+  if(j == 0)
+    j = k;
+  else
+    k = j;
+  
+  speed1 = speed1 / j;
+  speed2 = speed2 / j;
+  
   Motor.speed(MOTOR1, speed1);
   Motor.speed(MOTOR2, speed2);
+  
+  if(j != 0) {
+  speed1 = 0;
+  speed2 = 0;
+  }
   
   delay(1);
 }
@@ -41,31 +49,20 @@ void loop() {
 void upState() {
   switch (i) {
     case 2:
-     upSpeed(-10, 10);
+     upSpeed(-100, 100);
     break;
     
     case 3:
-     upSpeed(10, 10);
+     upSpeed(100, 100);
     break;
     
     case 4:
-     upSpeed(10, -10);
+     upSpeed(100, -100);
     break;
   }
 }
 
 void upSpeed(int M1, int M2) {
  speed1 += M1;
- 
- if(speed1 >= 100)
-   speed1 = 100;
- else if(speed1 <= -100)
-   speed1 = -100;
-   
  speed2 += M2;
- 
-  if(speed2 >= 100)
-   speed2 = 100;
- else if(speed2 <= -100)
-   speed2 = -100;
 }
