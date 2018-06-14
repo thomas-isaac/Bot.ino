@@ -1,0 +1,76 @@
+#include <Grove_I2C_Motor_Driver.h>
+#include <Wire.h>
+#define i2c_add 0x0f
+
+byte i, j, dir;
+
+int signalPin2 = 2;
+int signalPin3 = 3;
+int signalPin4 = 4;
+
+
+void setup() {
+  pinMode(signalPin2, INPUT); // Init each pin with INPUT mode
+  pinMode(signalPin3, INPUT); // (default mode)
+  pinMode(signalPin4, INPUT);
+
+  Motor.begin(i2c_add);
+}
+
+void loop() {
+  
+  for(dir=0, i=2, j=1; i<5; i++, j <<= 1) { // Read each pin INPUT (2-5)
+    if(digitalRead(i) == HIGH) // Some sort of bit shift logic
+      dir += j;
+  }
+    
+  switch (dir) { // A bit shameful
+
+    case 0: //No line detected - Keep going for some time
+     upSpeed(80, 80);
+    break;
+    
+    case 1: // Line on the right - Adjust to the right
+    while(digitalRead(2) != HIGH)
+     upSpeed(-50, 80);
+    break;
+    
+    case 2: // Line in the middle - Keep going
+     upSpeed(80, 80);
+     delay(80);
+    break;
+    
+    case 3: // Line on both right and mid - Turn right
+     upSpeed(0, 0);
+     while(digitalRead(2) != HIGH)
+       upSpeed(-50, 100);
+     
+    break;
+    
+    case 4: // Line on the left - Adjust to the left
+    while(digitalRead(2) != HIGH)
+     upSpeed(80, -50);
+    break;
+    
+    case 5: // Line on both right and left - Everything's fine..
+     upSpeed(80, 80);
+    break;
+    
+    case 6: // Line on both left and mid - Turn left
+     upSpeed(0, 0);
+     while(digitalRead(2) != HIGH)
+       upSpeed(100, -50);
+    break;
+    
+    case 7: // Line on left, right and mid - Merry Christmas
+     upSpeed(0, 0);
+     while(digitalRead(2) != HIGH)
+       upSpeed(-50, 100);
+    break;
+  }
+}
+
+void upSpeed(int M1, int M2) {
+  Motor.speed(MOTOR1, M1);
+  Motor.speed(MOTOR2, -M2);
+}
