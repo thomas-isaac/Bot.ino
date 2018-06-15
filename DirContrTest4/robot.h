@@ -3,17 +3,17 @@
 
 #include "moteur.h"
 
-class Robot
+class Robot // The Robot class
 {
 public:
   Robot();
   ~Robot();
 
-  void init();
-  void run();
+  void init(); // The initializiation function
+  void run(); // The main run function
 
 private:
-  Moteur moteurs;
+  Moteur moteurs; // The moteurs object
 };
 
 
