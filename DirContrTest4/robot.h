@@ -15,7 +15,7 @@ public:
 
   void init(); // The initializiation function
   void run(); // The main run function
-  void wheelSpeed();
+  void wheelSpeed(); // The speed sensor function
 
 private:
   Moteur moteurs; // The moteurs object

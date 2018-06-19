@@ -11,7 +11,7 @@ class Moteur
     ~Moteur();
     
     void init(); // The initialization
-    void upSpeed(const int &moteurA, const int &moteurB); // The speed update
+    void upSpeed(const int &moteurLmoteurL, const int &moteurR); // The speed update
   
 };
 

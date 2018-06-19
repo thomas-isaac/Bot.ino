@@ -3,8 +3,8 @@
 int wTrans = 0;
 int wTime;
 
-bool sensTrans;
-bool sensState;
+bool wPrevState;
+bool wNewState;
 
 Robot::Robot()
 {
@@ -32,7 +32,7 @@ void Robot::run() // The main function to run the robot
   }
 
   switch (dir) { // Defines the behavior of the robot depending on the sensors state
-		 // To make it clearer, each case will be associated to its binary value
+		 // To make it clearer, each case will be associated with its binary value
 
   case 0: // 000 : No line detected - Keep going for some time
     moteurs.upSpeed(80, 80);
@@ -75,22 +75,22 @@ void Robot::run() // The main function to run the robot
 
 }
 
-void Robot::wheelSpeed() {
-  float wSpeed;
-  sensState = digitalRead(WSENS);
+void Robot::wheelSpeed() { // Get the speed of the vehicule based its wheel rotation
+  float wSpeed; 
+  wNewState = digitalRead(WSENS); // Read the sensor state
   
-  if(sensTrans != sensState) {
-    if(wTrans == 0)
-      wTime = millis();
+  if(wPrevState != wNewState) { // If the state has changed, assume it is a new transition (rotation of the wheel from one hole to another)
+    if(wTrans == 0) // If it's the first transition
+      wTime = millis(); // Get the time at which the transition happens
       
-    wTrans++;
-    sensTrans = sensState;
+    wTrans++; // Increment the transitions count
+    wPrevState = wNewState; // The previous state is updated to new state (in preparation of the next turn of the loop)
 
-    if(wTrans == 20) {
-      wTime = millis() - wTime;
-      wTrans = 0;
-      wSpeed = WCIRCONF / (float)wTime;
-      Serial.println(wSpeed);
+    if(wTrans == 20) { // If 20 transitions have occured a full rotation was completed (there are 20 holes in the wheel)
+      wTime = millis() - wTime; // Process the full rotation time by substracting the first transition time to the current time
+      wTrans = 0; // Reinitialize the number of transitions (in preparation of the next turn of the loop)
+      wSpeed = WCIRCONF / (float)wTime; // Process the speed by dividing the circonference of the wheel by its full rotation time
+      Serial.println(wSpeed); // Print the new speed - Currently for testing purposes
     }
   }
 }
