@@ -12,12 +12,18 @@ void loop() {
   uint8_t msg[VW_MAX_MESSAGE_LEN];
   uint8_t msg_len = VW_MAX_MESSAGE_LEN;
   
+  drop:
   vw_wait_rx();
   
   if(vw_get_message(msg, &msg_len)){
-    byte i;
+      if(msg[0] != 7) {
+      Serial.println("Frame dropped");
+      goto drop;
+    }
     
-    for(i = 0; i < msg_len; i++)
+
+    byte i;    
+    for(i = 2; i < sizeof(msg) -1; i++)
      Serial.println(msg[i]);
   }
 }
