@@ -76,7 +76,6 @@ void Robot::run() // The main function to run the robot
 }
 
 void Robot::wheelSpeed() { // Get the speed of the vehicule based its wheel rotation
-  float wSpeed; 
   wNewState = digitalRead(WSENS); // Read the sensor state
   
   if(wPrevState != wNewState) { // If the state has changed, assume it is a new transition (rotation of the wheel from one hole to another)
@@ -86,11 +85,21 @@ void Robot::wheelSpeed() { // Get the speed of the vehicule based its wheel rota
     wTrans++; // Increment the transitions count
     wPrevState = wNewState; // The previous state is updated to new state (in preparation of the next turn of the loop)
 
-    if(wTrans == 20) { // If 20 transitions have occured a full rotation was completed (there are 20 holes in the wheel)
+    if(wTrans == 40) { // If 20 transitions have occured a full rotation was completed (there are 20 holes in the wheel)
       wTime = millis() - wTime; // Process the full rotation time by substracting the first transition time to the current time
       wTrans = 0; // Reinitialize the number of transitions (in preparation of the next turn of the loop)
       wSpeed = WCIRCONF / (float)wTime; // Process the speed by dividing the circonference of the wheel by its full rotation time
       Serial.println(wSpeed); // Print the new speed - Currently for testing purposes
     }
   }
+}
+
+float Robot::getSpeed()
+{
+  return wSpeed;
+}
+
+void Robot::reInit()
+{
+   wSpeed = 0; 
 }

@@ -6,27 +6,39 @@
 #define TOPBIT 128
 
 uint8_t  crcTable[256];
+uint8_t frame[6];
 
 void setup() {
   Serial.begin(9600);
-  vw_setup(1500);
-  vw_set_rx_pin(7);
-  vw_rx_start();
 }
 
 void loop() {
-  uint8_t msg[6];
-  uint8_t msg_len = 6;
+  sendFrame();
+}
 
-  vw_wait_rx();
+void sendFrame() {
+  writeFrame();
+  vw_set_tx_pin(8);
+  vw_setup(1500);
 
-  if(vw_get_message(msg, &msg_len) && msg[0] == 7)
-    for(byte i = 2; i < 5; i++) msg[i] = rot127(msg[i]);
-    
-  Serial.println(msg[2]);
-  Serial.println((char)msg[3]);
-  Serial.println((char)msg[4]);
-    
+  vw_send(frame, strlen((char*)frame));
+  vw_wait_tx();
+}
+
+
+void writeFrame() {
+  uint8_t i;
+  
+  frame[0] = 7; // DST
+  frame[1] = 7; // SRC
+  frame[2] = 80;
+  frame[3] = 65;
+  frame[4] = 66;
+  
+  for(i=2; i < sizeof(frame) -1; i++) frame[i] = rot127(frame[i]);
+
+  if(!crcTable) crcInit();
+  frame[i+1]= crcExec(frame, sizeof(frame));;
 }
 
 

@@ -16,6 +16,8 @@ uint8_t checksum;
 byte i;
 byte j;
 
+void crcInit();
+
 void setup() {
   Serial.begin(9600);
   vw_set_tx_pin(8);
@@ -51,7 +53,7 @@ uint8_t  crcTable[256];
 void crcInit() {
   uint8_t  remainder;
 
-  for (uint8_t dividend = 0; dividend < 256; ++dividend) {
+  for (int dividend = 0; dividend < 256; ++dividend) {
     remainder = dividend << (WIDTH - 8);
 
     for (uint8_t bit = 8; bit > 0; --bit) (remainder & TOPBIT) ? remainder = (remainder << 1) ^ POLYNOMIAL : remainder = (remainder <<1);
