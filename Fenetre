@@ -1,0 +1,41 @@
+import javax.swing.JFrame;
+/*import java.awt.Graphics;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;*/
+
+public class Fenetre extends JFrame {
+
+	    private static final long serialVersionUID = 6194625107521090216L;
+
+    public Fenetre(){
+        this.setTitle("Map AND Speed");
+        this.setSize(700, 550);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
+
+
+       // JPanel pan = new JPanel();//Instanciation d'un jpanel
+
+      //  pan.setBackground(Color.GRAY);//Définition de couleur
+      //  this.setContentPane(pan);
+
+        this.setContentPane(new Panneau());
+        this.setVisible(true);
+
+        int t = 1;
+        int d = 10;
+
+        while (t==1) {
+            if (d == 0){
+        this.repaint();
+        d=10;}
+            else{d--;}}
+      }
+
+
+		
+	}
