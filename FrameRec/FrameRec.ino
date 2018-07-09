@@ -9,6 +9,7 @@ uint8_t  crcTable[256];
 
 void setup() {
   Serial.begin(9600);
+  crcInit();
   vw_setup(1500);
   vw_set_rx_pin(7);
   vw_rx_start();
@@ -22,7 +23,7 @@ void loop() {
 
   if(vw_get_message(msg, &msg_len) && msg[0] == 7)
     for(byte i = 2; i < 5; i++) msg[i] = rot127(msg[i]);
-    
+  
   Serial.println(msg[2]);
   Serial.println((char)msg[3]);
   Serial.println((char)msg[4]);
